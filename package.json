@@ -1,0 +1,19 @@
+{
+  "name": "atendimentos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fcoromoto-estudo/alura-nodejs-atendimentos.git"
+  },
+  "author": "Francisco Coromoto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fcoromoto-estudo/alura-nodejs-atendimentos/issues"
+  },
+  "homepage": "https://github.com/fcoromoto-estudo/alura-nodejs-atendimentos#readme"
+}
