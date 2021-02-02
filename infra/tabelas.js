@@ -7,13 +7,15 @@ class Tabelas {
 
     criarAtendimento() {
         const sql = `
-         CREATE TABLE Atendimentos (
+         CREATE TABLE IF NOT EXISTS Atendimentos (
                           id MEDIUMINT NOT NULL AUTO_INCREMENT,
                           cliente CHAR(30) NOT NULL,
                           pet varchar(20),
                           servico varchar(20) NOT NULL,
                           status varchar(20) NOT NULL,
                           observacoes text,
+                          data DATETIME NOT NULL ,
+                          dataCriacao DATETIME NOT NULL,
                           PRIMARY KEY (id))
         `;
 
