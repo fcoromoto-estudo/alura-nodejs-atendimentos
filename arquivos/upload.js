@@ -15,5 +15,5 @@ fs.readFile('./assets/salsicha.jpg', (error, buffer) => {
 
 /** Leitura e escrita de arquivos de forma ASINCRONA **/
 fs.createReadStream('./assets/salsicha.jpg')
-    .pipe(fs.createWriteStream('./assets/salsicha-stream.jpg'))
+    .pipe(fs.createWriteStream('./assets/salsicha-stream2.jpg'))
     .on('finish', () => console.log('Escrita de arquivo finalizada'))
