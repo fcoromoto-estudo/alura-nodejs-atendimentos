@@ -42,7 +42,8 @@ Todo o projeto esta dockerizado.
 ## Como subir
 
 **Obs 1:** É importante que tenha rodado pelo menos 1 vez o ```npm install```.  
-**Obs 2:** Executar os comandos abaixo dentro da pasta raiz.
+**Obs 2:** Executar os comandos abaixo dentro da pasta raiz.  
+**Obs 3:** A porta ```9229``` está liberada para debug.
 
 1. **Criar os containers (irá criar e iniciar)**:
 ```shell
