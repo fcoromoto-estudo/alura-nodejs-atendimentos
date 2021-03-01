@@ -1,34 +1,32 @@
 const moment = require('moment')
 const conexao = require('../infra/conexao')
-const axios = require('axios')
+const uploadArquivo = require('../arquivos/upload')
 
-class Atendimento {
+class Pet {
 
-    adiciona(atendimento, resp) {
-        const dataCriacao = moment().format('YYYY-MM-DD HH:mm:ss')
-        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss')
-        const atendimentoDatado = {...atendimento, dataCriacao, data}
+    adiciona(pet, resp) {
+        const nomeArquivo = pet.nome;
+        const caminho = pet.imagem;
+        uploadArquivo(caminho, nomeArquivo, (errorUpload, novoNome) => {
+            if(errorUpload){
+                resp.status(400).json(errorUpload)
+            }else {
+                const novoPet = { nome : pet.nome, imagem : novoNome};
 
+                const query = 'INSERT INTO Pets SET ? '
 
-        const validacoes = [
-            validarData(data, dataCriacao),
-            validarCliente(atendimento.cliente)
-        ].filter(validacao => !validacao.valido);
+                conexao.query(query, novoPet, (errorDb, result) => {
 
-        if(validacoes.length > 0){
-            resp.status(400).json(validacoes)
-        }else {
-            const query = 'INSERT INTO Atendimentos SET ? '
+                    if(errorDb){
+                        resp.status(400).json(errorDb)
+                    } else {
+                        resp.status(201).json(novoPet)
+                    }
+                })
+            }
 
-            conexao.query(query, atendimentoDatado, (error, result) => {
+        })
 
-                if(error){
-                    resp.status(400).json(error)
-                } else {
-                    resp.status(201).json(result)
-                }
-            })
-        }
     }
 
     lista(resp){
@@ -47,7 +45,8 @@ class Atendimento {
     buscarPorId(id, resp){
         const query = `SELECT * FROM Atendimentos WHERE id = ${id}`
 
-        conexao.query(query, async (error, result) => {
+        conexao.query(query, (error, result) => {
+
             if(result.length === 0 ){
                 resp.status(404).send(`Atendimento ${id} não encontrado`)
             }
@@ -55,12 +54,6 @@ class Atendimento {
                 resp.status(400).json(error)
             } else {
                 const atendimento = result[0];
-                const cpf = atendimento.cliente;
-
-                const clientesPath = `http://${process.env.CLIENTES_API_HOST}:${process.env.CLIENTES_API_PORT}/${cpf}`
-                const { data } = await axios.get(clientesPath)
-                atendimento.cliente = data
-
                 resp.status(200).json(atendimento)
             }
         })
@@ -129,4 +122,4 @@ const validarCliente = (cliente) => {
     return validacao;
 }
 
-module.exports = new Atendimento()
+module.exports = new Pet()

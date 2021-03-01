@@ -5,6 +5,7 @@
 
 # dependencies
 node_modules/
+servicos/node_modules/
 
 # IDEs and editors
 /.idea

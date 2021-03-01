@@ -2,15 +2,16 @@ version: '3.4'
 
 services:
 
-  api:
+  api-atendimentos:
     image: node:12.16.1
-    container_name: 'api'
+    container_name: 'api-atendimentos'
     restart: always
     volumes:
       - ./../:/app
     working_dir: /app
     depends_on:
       - db
+      - api-clientes
     environment:
       API_PORT: 3000
       DATABASE_HOST: db
@@ -18,10 +19,23 @@ services:
       DATABASE_USER: root
       DATABASE_PASSWORD: admin
       DATABASE_NAME: atendimentos
+      CLIENTES_API_HOST: api-clientes
+      CLIENTES_API_PORT: 8082
     ports:
       - 3000:3000
       - 9229:9229
     command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm run debug'
+
+  api-clientes:
+    image: node:12.16.1
+    container_name: 'api-clientes'
+    restart: always
+    volumes:
+      - ./../servicos/:/app
+    working_dir: /app
+    ports:
+      - 8082:8082
+    command: npm run start
 
   db:
     image: mysql:5.7
