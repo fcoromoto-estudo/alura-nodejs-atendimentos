@@ -15,7 +15,8 @@ Todo o projeto esta dockerizado.
 
 ## Apis
 
-### Urls
+### Atendimentos
+
 | Descrição | Verbo Http | URL |
 | ------ | ------ | ------ |
 | Listar | GET |[http://localhost:3000/atendimentos/](http://localhost:3000/atendimentos/) |
@@ -24,24 +25,51 @@ Todo o projeto esta dockerizado.
 | Criar | POST |[http://localhost:3000/atendimentos/](http://localhost:3000/atendimentos/) |
 | Alterar | PUT |[http://localhost:3000/atendimentos/](http://localhost:3000/atendimentos/) |
 
-
-### Json Payload
+**Payload POST**
 ```json
 {
-  "cliente": "string",
-  "pet": "string",
-  "servico": "string",
-  "observacoes": "string",
-  "status": "string",
-  "data": "string" formato dd/MM/yyyy
+  "cliente": "02392979111",
+  "pet": "toby",
+  "servico": "tosa",
+  "observacoes": "bonzinho",
+  "status": "agendado",
+  "data": "04/02/2022"
 }
- 
 ```
+
+**Obs:** ``cliente`` deve ser um número de cpf
+
+### Pets
+
+| Descrição | Verbo Http | URL |
+| ------ | ------ | ------ |
+| Criar | POST |[http://localhost:3000/atendimentos/](http://localhost:3000/pets/) |
+
+
+**Json Payload POST**
+```json
+{
+  "nome": "Harry",
+  "imagem": "./assets/salsicha.js"
+}
+```
+
+### Clientes
+
+| Descrição | Verbo Http | URL |
+| ------ | ------ | ------ |
+| Buscar por CPF | GET  |[http://localhost:3000/atendimentos/{id}](http://localhost:8082/{cpf}) | 
+
+
+## Instalar as depedências
+Deve instalar as depedências dentro que esta na raiz ``/`` do projeto e também dentro da pasta ``servico/``.
+
+```npm install```
 
 
 ## Como subir
 
-**Obs 1:** É importante que tenha rodado pelo menos 1 vez o ```npm install```.  
+**Obs 1:** É importante que tenha rodado pelo menos 1 vez o ```npm install```.
 **Obs 2:** Executar os comandos abaixo dentro da pasta raiz.  
 **Obs 3:** A porta ```9229``` está liberada para debug.
 
