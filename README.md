@@ -69,7 +69,7 @@ Deve instalar as depedências dentro que esta na raiz ``/`` do projeto e também
 
 ## Como subir
 
-**Obs 1:** É importante que tenha rodado pelo menos 1 vez o ```npm install```.
+**Obs 1:** É importante que tenha rodado pelo menos 1 vez o ```npm install```.  
 **Obs 2:** Executar os comandos abaixo dentro da pasta raiz.  
 **Obs 3:** A porta ```9229``` está liberada para debug.
 
