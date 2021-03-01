@@ -1,10 +1,10 @@
 const moment = require('moment')
-const conexao = require('../infra/conexao')
-const axios = require('axios')
+const repository = require('../repositories/atendimento')
+const repositoryCliente = require('../repositories/cliente')
 
 class Atendimento {
 
-    adiciona(atendimento, resp) {
+    adiciona(atendimento) {
         const dataCriacao = moment().format('YYYY-MM-DD HH:mm:ss')
         const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss')
         const atendimentoDatado = {...atendimento, dataCriacao, data}
@@ -16,86 +16,45 @@ class Atendimento {
         ].filter(validacao => !validacao.valido);
 
         if(validacoes.length > 0){
-            resp.status(400).json(validacoes)
+            return new Promise((resolve, reject) => reject(validacoes))
         }else {
-            const query = 'INSERT INTO Atendimentos SET ? '
-
-            conexao.query(query, atendimentoDatado, (error, result) => {
-
-                if(error){
-                    resp.status(400).json(error)
-                } else {
-                    resp.status(201).json(result)
-                }
-            })
+           return repository.adiciona(atendimentoDatado)
+               .then(value => {
+                   return {id : value.insertId, ...atendimentoDatado}
+               })
         }
     }
 
-    lista(resp){
-        const query = 'SELECT * FROM Atendimentos '
-
-        conexao.query(query, (error, result) => {
-
-            if(error){
-                resp.status(400).json(error)
-            } else {
-                resp.status(200).json(result)
-            }
-        })
+    lista(){
+       return repository.lista()
     }
 
-    buscarPorId(id, resp){
-        const query = `SELECT * FROM Atendimentos WHERE id = ${id}`
+    buscarPorId(id){
+        return repository.buscarPorId(id)
+            .then(async atendimento => {
 
-        conexao.query(query, async (error, result) => {
-            if(result.length === 0 ){
-                resp.status(404).send(`Atendimento ${id} não encontrado`)
-            }
-            else if(error){
-                resp.status(400).json(error)
-            } else {
-                const atendimento = result[0];
                 const cpf = atendimento.cliente;
-
-                const clientesPath = `http://${process.env.CLIENTES_API_HOST}:${process.env.CLIENTES_API_PORT}/${cpf}`
-                const { data } = await axios.get(clientesPath)
+                const { data } = await repositoryCliente.buscarPorCPF(cpf)
                 atendimento.cliente = data
 
-                resp.status(200).json(atendimento)
-            }
-        })
+                return atendimento
+            })
     }
 
-    altera(id, valores, resp){
+    altera(id, valores){
 
         if(valores.data){
             valores.data = moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss')
         }
 
-        const query = `UPDATE Atendimentos SET ? WHERE id = ?`
-
-        conexao.query(query, [valores, id], (error,result) => {
-
-            if(error){
-                resp.status(400).json(error)
-            } else {
-                resp.status(200).json(result)
-            }
-        })
+        return repository.altera(id, valores)
+            .then(() => {
+                return {id, ... valores}
+            })
     }
 
-    deleta(id, resp){
-
-        const query = `DELETE FROM Atendimentos WHERE id = ?`
-
-        conexao.query(query, id, (error,result) => {
-
-            if(error){
-                resp.status(400).json(error)
-            } else {
-                resp.status(200).json(result)
-            }
-        })
+    deleta(id){
+        return repository.deleta(id)
     }
 }
 

@@ -33,7 +33,6 @@ module.exports = (caminho, nomeArquivo, callbackImagemCriada) => {
             .on('finish', () => callbackImagemCriada(null,novoNome))
     } else {
         const error = {descricao: `Error tipo inválido ${tipo}`};
-        console.error(error)
         callbackImagemCriada(error, null)
     }
 }
